@@ -14,7 +14,7 @@
 							<input type="text" placeholder="请输入手机号" />
 						</div>
 						<div class="login-tabs-validate">
-							<input type="text" id="txt-yzm" placeholder="请输入验证码" /><input type="button"  id="btn-yzm" value="获取验证码" />
+							<input type="text" id="txt-yzm" placeholder="请输入密码" /><!--<input type="button"  id="btn-yzm" value="获取验证码" />-->
 						</div>
 						
 					</div>
@@ -23,18 +23,15 @@
 				<div class="login-tabs-bd" v-show="!isShow" :key="1">
 					<div class="login-tabs-panel">
 						<div class="login-tabs-phone">
-							<input type="text" placeholder="请输入手机号" />
+							<input type="text" placeholder="请输入用户名" />
 						</div>
 						<div class="login-tabs-phone">
-							<input type="text" placeholder="密码" />
+							<input type="text" placeholder="请输入密码" />
 						</div>
-						<!--<div class="login-tabs-yzm">
-							<input type="text" id="txt-yzm2" placeholder="验证码" />
-						</div>-->
 					</div>
 					
 				</div>
-				<div class="btn-dl">
+				<div class="btn-dl" @click="land">
 					登陆
 				</div>
 				<div class="login-zc"><a href="">快速注册</a></div>
@@ -44,6 +41,7 @@
 	
 </template>
 <script>
+import axios from "axios";
 export default {
 
   name: 'login',
@@ -51,7 +49,7 @@ export default {
   data () {
     return {
 		ischoice:true,
-		loginway:["验证码登录","密码登录"],
+		loginway:["手机登录","用户名登录"],
 		currentIndex:0,
 		isShow:true
     }
@@ -65,18 +63,26 @@ export default {
 		if(this.currentIndex == 1){
 			this.isShow = false;
 		}
-  	}
+  	},
+  	land:function(){
+  	console.log("aaa")
+  	axios.post('/register',{
+  		
+  	}).then(function(res){
+  		console.log(res.data);
+  	}).catch(function(err){
+  		console.log(err);
+  	})
+    }
   }
+  
 }
 </script>
 <style type="text/css">
 	body,ul,li,h3,input{
 		margin: 0;
 		padding: 0;
-	}
-	#login{
-		background: #f5f5f5;
-	}
+	}	
 	.login-header{
 		position: fixed;
 	    top: 0;
@@ -98,12 +104,11 @@ export default {
 	    white-space: nowrap;
 	    overflow: hidden;
 	}
-	.login-body{
-		
+	.login-body{		
 		border: none;
+		background: #fcfcfc;
 		margin: .35em  .625em .75em;
-	}
-	
+	}	
 	.login-tabs-nav{
 		width: 100%;		
 	    padding: 0;
@@ -114,33 +119,41 @@ export default {
 	    display: -webkit-flex;
 	    display: -ms-flexbox;
 	    display: flex;
-	    background-color: #eee;
 	}
 	.login-tabs-nav li{
+		width: 50%;
 		height: 42px;
 		-webkit-box-flex: 1;
 		flex: 1;
 		position: relative;
-	    background-color: #fcfcfc;
-	    border-bottom: 2px solid #0e90d2;
+	    background-color: #eeeeee;	    
 	    box-sizing: border-box;
 	    line-height: 42px;       
-        display: block;
-	    word-wrap: normal;
-	    text-overflow: ellipsis;
-	    white-space: nowrap;
-	    overflow: hidden;
+        
 	    
+	}
+	.active{
+		position: relative;
+		border-bottom: 2px solid #62d399;
+		color: #62d399;
+		background: #fcfcfc;
+		height: 42px;
+		-webkit-box-flex: 1;
+		flex: 1;
 	}
 	.login-tabs-nav li a{
 		text-decoration: none;
 		color: #222;
 		font-size: 16px;
+        display: block;
+	    word-wrap: normal;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    overflow: hidden;
 	}
 	.login-tabs-bd{
 		height: 150px;
 		padding-top: 20px;
-	    touch-action: pan-y;
 	    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	    border-left: 1px solid #dddddd;
 	    border-right: 1px solid #dddddd;
@@ -180,7 +193,7 @@ export default {
 	#txt-yzm{
 		float: left;
 		display: block;
-	    width: 65%;
+	    width: 100%;
 	    padding: .625em;
 	    line-height: 1.2;
 	    color: #555;
@@ -191,30 +204,6 @@ export default {
 	    -webkit-appearance: none;
 	    font-size: 1.8rem;
 	    box-sizing: border-box;
-	}
-	#btn-yzm{
-		float: left;
-		width: 30%;
-	    float: left;
-	    margin-left: 5%;
-	    background-color: #62d399;
-	    color: #fff;
-	    border-color: #62d399;
-	    display: block;
-	    font-size: 1.8rem;
-	    font-weight: 400;
-	    line-height: 1.2;
-	    text-align: center;
-	    white-space: nowrap;
-	    border: 1px solid transparent;
-	    border-radius: 2px;
-	    cursor: pointer;
-	    outline: 0;
-	    margin-bottom: 0;
-	    padding: .625em 1em;
-	    vertical-align: middle;
-	    padding-left: 0;
-        padding-right: 0;
 	}
 	.btn-dl{
 	    margin-top: 13px;
@@ -240,7 +229,7 @@ export default {
 	}
 	.login-zc{
 		float: right;
-		font-size: 16px;
+		font-size: 1.5rem;
 		margin-top: 10px;
 		margin-right: 10px;
 		cursor: pointer;		
