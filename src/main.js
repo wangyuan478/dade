@@ -5,7 +5,10 @@ import App from './App'
 import router from './router'
 
 Vue.config.productionTip = false
-
+//引入elementui
+//import ElementUI from 'element-ui';
+//import 'element-ui/lib/theme-chalk/index.css';
+//Vue.use(ElementUI);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

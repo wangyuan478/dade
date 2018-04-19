@@ -11,10 +11,10 @@
 				<div class="login-tabs-bd" v-show="isShow" :key="0">
 					<div class="login-tabs-panel">
 						<div class="login-tabs-phone">
-							<input type="text" placeholder="请输入手机号" />
+							<input  v-model="telNum" type="text" placeholder="请输入手机号" />
 						</div>
 						<div class="login-tabs-validate">
-							<input type="text" id="txt-yzm" placeholder="请输入密码" /><!--<input type="button"  id="btn-yzm" value="获取验证码" />-->
+							<input  v-model="password" type="text" id="txt-yzm" placeholder="请输入密码" />
 						</div>
 						
 					</div>
@@ -31,10 +31,13 @@
 					</div>
 					
 				</div>
-				<div class="btn-dl" @click="land">
+				<div class="btn-dl" @click="loginBtn">
 					登陆
 				</div>
-				<div class="login-zc"><a href="">快速注册</a></div>
+				<div class="login-zc"><router-link to="/register" tag="a" >快速注册</router-link></div>
+				<div class="errmessage" v-show="err">
+				<span>{{errspan}}</span>
+			    </div>
 			</div>
 		</div>
 	</div>
@@ -51,7 +54,11 @@ export default {
 		ischoice:true,
 		loginway:["手机登录","用户名登录"],
 		currentIndex:0,
-		isShow:true
+		isShow:true,
+		telNum:'',
+	    password:'',
+		errspan:"",
+		err:false
     }
   },
   methods:{
@@ -64,16 +71,27 @@ export default {
 			this.isShow = false;
 		}
   	},
-  	land:function(){
+  	loginBtn:function(){
   	console.log("aaa")
-  	axios.post('/register',{
-  		
+  	var telnum = this.telNum;
+  	var password = this.password;
+	
+	
+	axios.post('/login111',{
+		telnum,
+		password
   	}).then(function(res){
-  		console.log(res.data);
+  		if(res.data==true){
+  			this.err = false;
+  		}else{
+  			this.err = true;
+  			this.errspan="手机号或者密码错误，请重新输入"
+  		}
   	}).catch(function(err){
   		console.log(err);
   	})
-    }
+  	
+   }
   }
   
 }
@@ -253,5 +271,20 @@ export default {
     border: 1px solid #ccc;
     border-radius: 2px;
     -webkit-appearance: none;
+	}
+	.errmessage{
+		margin-top: 4rem;
+		width: 100%;
+		height: 4rem;
+		line-height: 4rem;
+		background: red;
+		opacity: 0.3;
+		border-radius: 1rem;
+	}
+	.errmessage span{
+
+		font-size:2rem ;
+		text-align: center;
+		color: white;
 	}
 </style>
