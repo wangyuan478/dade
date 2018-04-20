@@ -14,26 +14,27 @@
 							<input  v-model="telNum" type="text" placeholder="请输入手机号" />
 						</div>
 						<div class="login-tabs-validate">
-							<input  v-model="password" type="text" id="txt-yzm" placeholder="请输入密码" />
+							<input  v-model="password1" type="text" id="txt-yzm" placeholder="请输入密码" />
 						</div>
 						
 					</div>
-					
+					<div class="btn-dl" @click="loginBtn1">
+					   登陆
+				    </div>
 				</div>
 				<div class="login-tabs-bd" v-show="!isShow" :key="1">
 					<div class="login-tabs-panel">
 						<div class="login-tabs-phone">
-							<input type="text" placeholder="请输入用户名" />
+							<input v-model="userName" type="text" placeholder="请输入用户名" />
 						</div>
 						<div class="login-tabs-phone">
-							<input type="text" placeholder="请输入密码" />
+							<input v-model="password2" type="text" placeholder="请输入密码" />
 						</div>
 					</div>
-					
-				</div>
-				<div class="btn-dl" @click="loginBtn">
-					登陆
-				</div>
+					<div class="btn-dl" @click="loginBtn2">
+					      确定
+				    </div>
+				</div>				
 				<div class="login-zc"><router-link to="/register" tag="a" >快速注册</router-link></div>
 				<div class="errmessage" v-show="err">
 				<span>{{errspan}}</span>
@@ -56,7 +57,9 @@ export default {
 		currentIndex:0,
 		isShow:true,
 		telNum:'',
-	    password:'',
+		userName:'',
+		password1:'',
+	    password2:'',
 		errspan:"",
 		err:false
     }
@@ -71,27 +74,61 @@ export default {
 			this.isShow = false;
 		}
   	},
-  	loginBtn:function(){
-  	console.log("aaa")
-  	var telnum = this.telNum;
-  	var password = this.password;
-	
-	
-	axios.post('/login111',{
-		telnum,
-		password
-  	}).then(function(res){
-  		if(res.data==true){
-  			this.err = false;
-  		}else{
-  			this.err = true;
-  			this.errspan="手机号或者密码错误，请重新输入"
+  	loginBtn1:function(){
+	  	var telnum = this.telNum;
+	  	var password = this.password1;
+  		if(/^1[3|5|7|8][0-9]\d{4,8}$/.test(this.telNum)&&/^[A-Za-z0-9]{6,20}$/.test(this.password)){ 		    
+		axios.post('/login111',{
+			telnum,
+			password
+	  	}).then((res)=>{
+	  		console.log(res);
+	  		if(res.data==false){
+	  			this.err = true;
+	  			this.errspan="手机号或者密码错误，请重新登陆";
+	  			console.log("登陆失败");
+	  			
+	  		}else{
+	  			this.err = true;
+	  			this.errspan="登陆成功";
+	  			setTimeout(()=>{
+				  this.$router.push("/home")
+				},1500)
+	  		}
+	  	}).catch(function(err){
+	  		console.log(err);
+	  	})
+  	}
+  		},
+  		loginBtn2:function(){
+  			var username = this.userName;
+	  	    var password = this.password2;
+  			if(/^[\u4E00-\u9FA5]{1,5}$/.test(this.userName)&&/^[A-Za-z0-9]{6,20}$/.test(this.password2)){
+  				console.log("222");
+  			axios.post('/login11',{
+			username,
+			password
+		  	}).then((res)=>{
+		  		console.log(res);
+		  		if(res.data==false){
+		  			this.err = true;
+		  			this.errspan="用户名或者密码错误，请重新登陆";
+		  			console.log("登陆失败");
+		  			
+		  		}else{
+		  			this.err = true;
+		  			this.errspan="登陆成功";
+		  			setTimeout(()=>{
+					  this.$router.push("/home")
+					},1500)
+		  		}
+		  	}).catch(function(err){
+		  		console.log(err);
+		  	})
   		}
-  	}).catch(function(err){
-  		console.log(err);
-  	})
-  	
-   }
+  		}
+  		
+   
   }
   
 }
@@ -224,7 +261,7 @@ export default {
 	    box-sizing: border-box;
 	}
 	.btn-dl{
-	    margin-top: 13px;
+	    margin-top: 163px;
 		background-color: #62d399;
 	    color: #fff;
 	    border-color: #62d399;
@@ -248,8 +285,8 @@ export default {
 	.login-zc{
 		float: right;
 		font-size: 1.5rem;
-		margin-top: 10px;
-		margin-right: 10px;
+		margin-top: 6.5rem;
+		margin-right: 1rem;
 		cursor: pointer;		
 	}
 	.login-zc a{
@@ -273,7 +310,7 @@ export default {
     -webkit-appearance: none;
 	}
 	.errmessage{
-		margin-top: 4rem;
+		margin-top: 9rem;
 		width: 100%;
 		height: 4rem;
 		line-height: 4rem;

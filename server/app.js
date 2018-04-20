@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var register = require('./routes/register');
 var login = require('./routes/login');
+var login11 = require('./routes/login11');
 //---------------自定义的路由-----------------------
 
 //-------------连接数据库---------------------------------
@@ -43,6 +44,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/register111',register);
 app.use("/login111",login);
+app.use("/login11",login11)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

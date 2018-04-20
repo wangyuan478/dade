@@ -11,20 +11,20 @@ router.post('/', function(req, res, next) {
 	var isrepct = false;
 	UserModel.find({
 		telnum:req.body.telnum,
-		password:req.body.password
 	},function(err,data){
 		if(data.length==0){
 			UserModel.create({
 			telnum:req.body.telnum,
-			password:req.body.password
+			password:req.body.password,
+			username:req.body.username
 		},function(err,data){
 			if(!err){
-	            isrepct = false;
+	            isrepct = true;
 	            res.send(isrepct);
 			}
 		})
 		}else{
-			isrepct = true;
+			isrepct = false;
 	        res.send(isrepct);
 		}
 	})

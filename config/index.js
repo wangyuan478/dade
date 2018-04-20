@@ -13,12 +13,17 @@ module.exports = {
     proxyTable: {
     	'/register111': {
               target: 'http://localhost:3000',
-//            host: 'localhost:3000',
+              host: 'localhost:3000',
               changeOrigin:true
      },
      '/login111': {
               target: 'http://localhost:3000',
-//            host: 'localhost:3000',
+              host: 'localhost:3000',
+              changeOrigin:true
+     },
+     '/login11': {
+              target: 'http://localhost:3000',
+              host: 'localhost:3000',
               changeOrigin:true
       }
     },

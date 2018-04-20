@@ -6,6 +6,7 @@
 		<div class="register-body">
 			<ul class="register-input">
 			<li><input @change="changetel" v-model="telNum" type="text"  class="register-txt" value="" placeholder="请输入手机号" /></li>
+			<li><input @change="changeuser" v-model="userName" type="text"  class="register-txt" value="" placeholder="请输入中文用户名" /></li>
 			<li><input @change="changePassword1" v-model="password1" type="text"  class="register-txt" value="" placeholder="密码"/></li>
 			<li><input @change="changePassword2" v-model="password2" type="text"  class="register-txt" value="" placeholder="确认密码"/></li>			
 			</ul>
@@ -33,9 +34,11 @@ import axios from "axios";
 		data () {
 		    return {
 				telNum:'',
+				userName:'',
 				password1:'',
 				password2:'',
 				isTel:false,
+				isName:false,
 				isPassword:false,
 				isSame:false,
 				errspan:'',
@@ -54,6 +57,18 @@ import axios from "axios";
 					this.err=true
 					this.errspan="请输入11位手机号";
 					console.log("请输入11位手机号");
+				}
+			},
+			changeuser:function(){
+				 var name = /^[\u4E00-\u9FA5]{1,5}$/; //只能是中文;
+				 if(name.test(this.userName)){
+					this.isName = true;
+					this.err = false;
+				}else{
+					this.isName=false;
+					this.err=true
+					this.errspan="请1至5位中文用户名";
+					console.log("请1至5位中文用户名");
 				}
 			},
 			changePassword1:function(){
@@ -79,27 +94,30 @@ import axios from "axios";
 				}
 			},
 			registerBtn:function(){
-				if(this.isTel==true&&this.isPassword == true&&this.password2==this.password1){
+				if(/^1[3|5|7|8][0-9]\d{4,8}$/.test(this.telNum)&&/^[A-Za-z0-9]{6,20}$/.test(this.password1)&&this.password2==this.password1&&/^[\u4E00-\u9FA5]{1,5}$/.test(this.userName)){
 					
 					var telnum = this.telNum;
 		      	    var password = this.password2;
-				
+				    var username = this.userName;
 				
 				axios.post('/register111',{
 					telnum,
-					password
-			  	}).then(function(res){
-			  		if(res.data==false){
-			  			this.errspan="注册成功"
-			  			this.err = true;
-			  			
+					password,
+					username
+			  	}).then((res)=>{
+			  		console.log(res.data);
+			  		if(res.data==false){			  			
+			  			this.err=true
+					    this.errspan="该手机号已注册";		
 			  		}else{
 			  			this.err = true;
-			  			this.errspan="该账号已注册"
+			  			this.errspan="注册成功"
+			  			setTimeout(()=>{
+			  				this.$router.push("/login")
+			  			},1500)
 			  		}
-			  		console.log(res.data);
 			  	}).catch(function(err){
-			  		console.log("err");
+//			  		console.log(err);
 			  	})
 			  	}
 				else{
